@@ -1,0 +1,23 @@
+.row-layout {
+    display: flex;
+}
+.end-container {
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    height: 100%;
+}
+.group {
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    position: relative;
+    min-width: 50px;
+    min-height: 50px;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+.text {
+    height: max-content;
+    min-width: min-content;
+}

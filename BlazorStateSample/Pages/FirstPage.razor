@@ -1,0 +1,78 @@
+@page "/"
+@page "/first-page"
+@using Blazored.LocalStorage
+@inject ILocalStorageService Localstorage;
+@inject NavigationManager NavigationManager
+
+<div class="row-layout first-page-container">
+    <div class="column-layout group">
+        <div class="row-layout group_1">
+            <p class="typography__body-1 text">
+                Page 1/3
+            </p>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput DisplayType="InputType.Email" Label="Email address" Outlined="true" class="input" @bind-value="Email" first_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput Label="Username" Outlined="true" class="input" @bind-value="Username" first_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput DisplayType="InputType.Password" Label="Password" Outlined="true" class="input" @bind-value="Password" first_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_3">
+            <IgbButton Disabled="true" Size="SizableComponentSize.Large" class="button" first_page-scope>
+                Previous
+                <IgbRipple></IgbRipple>
+            </IgbButton>
+            <IgbButton Size="SizableComponentSize.Large" @onclick="@(e => Navigate("second-page"))" class="button" first_page-scope>
+                Next
+                <IgbRipple></IgbRipple>
+            </IgbButton>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string _email = string.Empty;
+    private string Email {
+        get => _email;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("email", value);
+            _email = value;
+        }
+    }
+    private string _username = string.Empty;
+    private string Username {
+        get => _username;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("username", value);
+            _username = value;
+        }
+    }
+    
+    private string _password = string.Empty;
+    private string Password {
+        get => _password;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("password", value);
+            _password = value;
+        }
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        Email = await Localstorage.GetItemAsStringAsync("email");
+        Username = await Localstorage.GetItemAsStringAsync("username");
+        Password = await Localstorage.GetItemAsStringAsync("password");
+    }
+
+    public void Navigate(string path)
+    {
+        NavigationManager.NavigateTo(path);
+    }
+}

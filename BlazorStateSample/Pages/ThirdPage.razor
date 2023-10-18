@@ -1,0 +1,109 @@
+@page "/third-page"
+@using Blazored.LocalStorage
+@using BlazorStateSample.Model
+@inject ILocalStorageService Localstorage;
+@inject NavigationManager NavigationManager
+
+<div class="row-layout third-page-container">
+    <div class="column-layout group">
+        <div class="row-layout group_1">
+            <p class="typography__body-1 text">
+                Page 3/3
+            </p>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput Label="Interests" Outlined="true" class="user-input" @bind-value="Interests" third_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput DisplayType="InputType.Tel" Label="Phone" Outlined="true" class="user-input" @bind-value="Phone" third_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_2">
+            <IgbDatePicker Label="Date of birth" class="user-input" @bind-value="DateOfBirth" third_page-scope></IgbDatePicker>
+        </div>
+        <div class="row-layout group_3">
+            <IgbButton Size="SizableComponentSize.Large" @onclick="@(e => Navigate("second-page"))" class="button" third_page-scope>
+                Previous
+                <IgbRipple></IgbRipple>
+            </IgbButton>
+            <IgbButton Size="SizableComponentSize.Large" @onclick="@(e => Submit())" class="button" third_page-scope>
+                Submit
+                <IgbRipple></IgbRipple>
+            </IgbButton>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string[] _keys = { "email", "username", "password", "firstName", "lastName", "age", "interests", "phone", "dateOfBirth" };
+    private string _interests = string.Empty;
+
+    private string Interests
+    {
+        get => _interests;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("interests", value);
+            _interests = value;
+        }
+    }
+
+    private string _phone = string.Empty;
+
+    private string Phone
+    {
+        get => _phone;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("phone", value);
+            _phone = value;
+        }
+    }
+
+    private DateTime _dateOfBirth = new();
+
+    private DateTime DateOfBirth
+    {
+        get => _dateOfBirth;
+        set
+        {
+            Localstorage.SetItemAsync("dateOfBirth", value);
+            _dateOfBirth = value;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Interests = await Localstorage.GetItemAsStringAsync("interests");
+        Phone = await Localstorage.GetItemAsStringAsync("phone");
+        DateOfBirth = await Localstorage.GetItemAsync<DateTime>("dateOfBirth");
+    }
+
+    public async Task Submit()
+    {
+        // Get all variables from local storage and submit to an endpoint
+        var user = new UserInformation()
+        {
+            Email = await Localstorage.GetItemAsStringAsync("email"),
+            Username = await Localstorage.GetItemAsStringAsync("username"),
+            Password = await Localstorage.GetItemAsStringAsync("password"),
+            FirstName = await Localstorage.GetItemAsStringAsync("firstName"),
+            LastName = await Localstorage.GetItemAsStringAsync("lastName"),
+            Age = await Localstorage.GetItemAsStringAsync("age"),
+            Interests = await Localstorage.GetItemAsStringAsync("interests"),
+            Phone = await Localstorage.GetItemAsStringAsync("phone"),
+            DateOfBirth = await Localstorage.GetItemAsync<DateTime>("dateOfBirth")
+        };
+        
+        // Cleanup local storage after successful API call and navigate user another page
+        await Localstorage.RemoveItemsAsync(_keys);
+
+        await Localstorage.SetItemAsync("user", user);
+        NavigationManager.NavigateTo("/end");
+    }
+
+    public void Navigate(string path)
+    {
+        NavigationManager.NavigateTo(path);
+    }
+}

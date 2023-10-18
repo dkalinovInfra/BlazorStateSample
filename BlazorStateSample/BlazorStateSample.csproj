@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="IgniteUI.Blazor.Trial" Version="23.1.72" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pages/FirstPage.razor.css" CssScope="first_page-scope" />
+    <None Update="Pages/SecondPage.razor.css" CssScope="second_page-scope" />
+    <None Update="Pages/ThirdPage.razor.css" CssScope="third_page-scope" />
+  </ItemGroup>
+
+</Project>

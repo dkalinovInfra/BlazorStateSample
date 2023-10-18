@@ -1,0 +1,77 @@
+@page "/second-page"
+@using Blazored.LocalStorage
+@inject ILocalStorageService Localstorage;
+@inject NavigationManager NavigationManager
+
+<div class="row-layout second-page-container">
+    <div class="column-layout group">
+        <div class="row-layout group_1">
+            <p class="typography__body-1 text">
+                Page 2/3
+            </p>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput Label="First name" Outlined="true" class="input" @bind-value="FirstName" second_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput Label="Last name" Outlined="true" class="input" @bind-value="LastName" second_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_2">
+            <IgbInput DisplayType="InputType.Number" Label="Age" Outlined="true" class="input" @bind-value="Age" second_page-scope></IgbInput>
+        </div>
+        <div class="row-layout group_3">
+            <IgbButton Size="SizableComponentSize.Large" @onclick="@(e => Navigate(""))" class="button" second_page-scope>
+                Previous
+                <IgbRipple></IgbRipple>
+            </IgbButton>
+            <IgbButton Size="SizableComponentSize.Large" @onclick="@(e => Navigate("third-page"))" class="button" second_page-scope>
+                Next
+                <IgbRipple></IgbRipple>
+            </IgbButton>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string _firstName = string.Empty;
+    private string FirstName {
+        get => _firstName;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("firstName", value);
+            _firstName = value;
+        }
+    }
+    private string _lastName = string.Empty;
+    private string LastName {
+        get => _lastName;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("lastName", value);
+            _lastName = value;
+        }
+    }
+    
+    private string _age;
+    private string Age {
+        get => _age;
+        set
+        {
+            Localstorage.SetItemAsStringAsync("age", value);
+            _age = value;
+        }
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        FirstName = await Localstorage.GetItemAsStringAsync("firstName");
+        LastName = await Localstorage.GetItemAsStringAsync("lastName");
+        Age = await Localstorage.GetItemAsStringAsync("age");
+    }
+    
+    public void Navigate(string path)
+    {
+        NavigationManager.NavigateTo(path);
+    }
+}

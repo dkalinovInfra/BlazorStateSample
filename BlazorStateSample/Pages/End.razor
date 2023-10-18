@@ -1,0 +1,28 @@
+@page "/end"
+@using BlazorStateSample.Model
+@using Blazored.LocalStorage
+@inject ILocalStorageService Localstorage;
+
+<div class="row-layout end-container">
+    <div class="row-layout group">
+        <p class="typography__body-1 text">
+            Thank you, 
+            @if(user != null){
+                @user.FirstName@:&nbsp;@user.LastName 
+            }
+            for submitting the form!
+        </p>
+    </div>
+</div>
+
+@code {
+
+    private UserInformation user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await Localstorage.GetItemAsync<UserInformation>("user");
+        
+    }
+
+}
